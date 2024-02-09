@@ -1,6 +1,5 @@
 import { validate as uuidValidate } from 'uuid'
 import { Entity } from '../../entity'
-import exp from 'constants'
 
 type StubProps = {
   prop1: string
@@ -31,6 +30,6 @@ describe('userEntity unit tests', () => {
     const id = '7130cfa9-b677-41dd-8491-afa3ae500c4c'
     const entity = new StubEntity(props, id)
 
-    expect(entity.toJSON()).toStrictEqual({ id, ...props, })
+    expect(entity.toJSON()).toStrictEqual({ id, ...props })
   })
 })
