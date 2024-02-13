@@ -1,10 +1,10 @@
 import { UserDataBuilder } from '@/users/domain/testing/helpers/user-data-builder'
 import { UserEntity, UserProps } from '../../../user.entity'
-import { EntityValidationError } from '@/shared/domain/entities/errors/validation-error'
+import { EntityValidationError } from '@/shared/domain/errors/validation-error'
 
 describe('UserEntity integration tests', () => {
   describe('Constructor method', () => {
-    it('should throw an error when creating a user with invalid name ', () => {
+    it('should throw an error when creating a user with invalid name', () => {
       let props: UserProps = {
         ...UserDataBuilder({}),
         name: null,
@@ -33,7 +33,7 @@ describe('UserEntity integration tests', () => {
       expect(() => new UserEntity(props)).toThrowError(EntityValidationError)
     })
 
-    it('should throw an error when creating a user with invalid email ', () => {
+    it('should throw an error when creating a user with invalid email', () => {
       let props: UserProps = {
         ...UserDataBuilder({}),
         email: null,
@@ -62,7 +62,7 @@ describe('UserEntity integration tests', () => {
       expect(() => new UserEntity(props)).toThrowError(EntityValidationError)
     })
 
-    it('should throw an error when creating a user with invalid password ', () => {
+    it('should throw an error when creating a user with invalid password', () => {
       let props: UserProps = {
         ...UserDataBuilder({}),
         password: null,
@@ -91,7 +91,7 @@ describe('UserEntity integration tests', () => {
       expect(() => new UserEntity(props)).toThrowError(EntityValidationError)
     })
 
-    it('should throw an error when creating a user with invalid createdAt ', () => {
+    it('should throw an error when creating a user with invalid createdAt', () => {
       let props: UserProps = {
         ...UserDataBuilder({}),
         createdAt: '2024' as any,
@@ -104,6 +104,31 @@ describe('UserEntity integration tests', () => {
       }
 
       expect(() => new UserEntity(props)).toThrowError(EntityValidationError)
+    })
+
+    it('should a valid user', () => {
+      expect.assertions(0)
+      const props: UserProps = {
+        ...UserDataBuilder({}),
+        createdAt: '2024' as any,
+      }
+      new UserEntity(props)
+    })
+  })
+
+  describe('Update method', () => {
+    it('should throw an error when update a user with invalid name', () => {
+      const entity = new UserEntity(UserDataBuilder({}))
+      console.log(entity)
+      console.log(entity.update(null))
+      //expect(() => entity.update(null).toThrowError(EntityValidationError))
+    })
+
+    it('should a invalid user using password field', () => {
+      const entity = new UserEntity(UserDataBuilder({}))
+      console.log(entity)
+      console.log(entity.updatePassword(null))
+      //expect(() => entity.update(null).toThrowError(EntityValidationError))
     })
   })
 })

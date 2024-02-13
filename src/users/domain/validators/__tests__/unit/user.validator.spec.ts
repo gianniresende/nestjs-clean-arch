@@ -1,4 +1,3 @@
-import { UserPreferences } from 'typescript'
 import {
   UserRules,
   UserValidator,
