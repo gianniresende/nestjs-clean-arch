@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   IsDate,
   IsOptional,
+  IsEmail,
 } from 'class-validator'
 
 export class UserRules {
@@ -16,6 +17,7 @@ export class UserRules {
 
   @MaxLength(255)
   @IsString()
+  @IsEmail()
   @IsNotEmpty()
   email: string
 
