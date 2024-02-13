@@ -1,6 +1,5 @@
 import { Entity } from '@/shared/domain/entities/entity'
 import { InMemoryRepository } from '../../in-memory.repository'
-import { error } from 'console'
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 
 type StubEntityProps = {
@@ -43,5 +42,23 @@ describe('InMemoryRepository unit tests', () => {
     await sut.insert(entity)
     const result = await sut.findAll()
     expect([entity]).toStrictEqual(result)
+  })
+
+  it('Should throw error on update when entity not found', async () => {
+    const entity = new StubEntity({ name: 'test name', price: 50 })
+    await expect(sut.update(entity)).rejects.toThrow(
+      new NotFoundError('Entity not found'),
+    )
+  })
+
+  it('Should update an entity', async () => {
+    const entity = new StubEntity({ name: 'test name', price: 50 })
+    await sut.insert(entity)
+    const entityUpdate = new StubEntity(
+      { name: 'updated', price: 20 },
+      entity._id,
+    )
+    await sut.update(entityUpdate)
+    expect(entityUpdate.toJSON()).toStrictEqual(sut.items[0].toJSON())
   })
 })
