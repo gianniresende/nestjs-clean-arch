@@ -1,15 +1,19 @@
+import { UserPreferences } from 'typescript'
 import {
   UserRules,
   UserValidator,
   UserValidatorFactory,
 } from '../../user.validator'
 import { UserDataBuilder } from '@/users/domain/testing/helpers/user-data-builder'
+import { UserProps } from '@/users/domain/entities/user.entity'
 
 let sut: UserValidator
+let props: UserProps
 
 describe('UserValidator unit tests', () => {
   beforeEach(() => {
     sut = UserValidatorFactory.create()
+    props = UserDataBuilder({})
   })
 
   it('Valid case for user validator class ', () => {
@@ -112,6 +116,22 @@ describe('UserValidator unit tests', () => {
         'password must be shorter than or equal to 100 characters',
       ])
       console.log(sut.errors)
+    })
+  })
+
+  describe('CreatedAt field', () => {
+    it('Invalidation cases for name field ', () => {
+      let isValid = sut.validate({ ...props, createdAt: 10 as any })
+      console.log(sut.errors)
+      expect(sut.errors['createdAt']).toStrictEqual([
+        'createdAt must be a Date instance',
+      ])
+
+      isValid = sut.validate({ ...props, createdAt: '2024' as any })
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['createdAt']).toStrictEqual([
+        'createdAt must be a Date instance',
+      ])
     })
   })
 })
