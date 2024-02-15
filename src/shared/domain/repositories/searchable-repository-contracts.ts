@@ -111,7 +111,7 @@ export class SearchResult<E extends Entity, Filter = string> {
     this.items = props.items
     this.total = props.total
     this.currentPage = props.currentPage
-    this.lastPage = Math.ceil(this.total / this.perPage)
+    this.lastPage = Math.ceil(props.total / props.perPage)
     this.perPage = props.perPage
     this.sort = props.sort ?? null
     this.sortDir = props.sortDir ?? null
@@ -121,7 +121,7 @@ export class SearchResult<E extends Entity, Filter = string> {
   toJSON(forceEntity = false) {
     return {
       items: forceEntity ? this.items.map(item => item.toJSON()) : this.items,
-      total: this.items,
+      total: this.total,
       currentPage: this.currentPage,
       lastPage: this.lastPage,
       perPage: this.perPage,
@@ -133,8 +133,9 @@ export class SearchResult<E extends Entity, Filter = string> {
 }
 export interface SearchableRepositoryInterface<
   E extends Entity,
-  SearchInput,
-  SearchOutput,
+  Filter = string,
+  SearchInput = SearchParams,
+  SearchOutput = SearchResult<E, Filter>,
 > extends RepositoryInterface<E> {
-  search(props: SearchParams): Promise<SearchOutput>
+  search(props: SearchInput): Promise<SearchOutput>
 }
