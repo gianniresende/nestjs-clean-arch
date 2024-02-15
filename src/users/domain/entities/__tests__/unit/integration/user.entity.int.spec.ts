@@ -121,14 +121,14 @@ describe('UserEntity integration tests', () => {
       const entity = new UserEntity(UserDataBuilder({}))
       console.log(entity)
       console.log(entity.update(null))
-      //expect(() => entity.update(null).toThrowError(EntityValidationError))
+      expect(() => entity.update(null)).toThrowError(EntityValidationError)
     })
 
     it('should a invalid user using password field', () => {
       const entity = new UserEntity(UserDataBuilder({}))
       console.log(entity)
       console.log(entity.updatePassword(null))
-      //expect(() => entity.update(null).toThrowError(EntityValidationError))
+      expect(() => entity.update(null)).toThrowError(EntityValidationError)
     })
   })
 })
