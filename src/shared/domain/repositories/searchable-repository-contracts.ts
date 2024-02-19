@@ -21,7 +21,7 @@ export type SearchResultProps<E extends Entity, Filter = string> = {
   filter: Filter | null
 }
 
-export class SearchParams<Filter extends this = string> {
+export class SearchParams<Filter = string> {
   protected _page: number
   protected _perPage = 15
   protected _sort: string | null
@@ -91,7 +91,7 @@ export class SearchParams<Filter extends this = string> {
     return this._filter
   }
 
-  private set filter(value: string | null) {
+  private set filter(value: Filter | null) {
     this._filter =
       value === null || value === undefined || value === ''
         ? null
