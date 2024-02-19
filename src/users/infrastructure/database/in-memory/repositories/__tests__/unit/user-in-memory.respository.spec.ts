@@ -1,7 +1,7 @@
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserInMemoryRepository } from '../../user-in-memory.repository'
 import { UserDataBuilder } from '@/users/domain/testing/helpers/user-data-builder'
-import { NotFoundError } from 'rxjs'
+import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { ConflictError } from '@/shared/domain/errors/conflict-error'
 
 describe('UserInMemoryRepository unit tests', () => {
@@ -59,5 +59,46 @@ describe('UserInMemoryRepository unit tests', () => {
     const itemsFiltered = await sut['applyFilter'](items, 'test')
     expect(spyFilter).toHaveBeenCalled()
     expect(itemsFiltered).toStrictEqual([items[0], items[1], items[2]])
+  })
+
+  it('Should sort by createdaAt when sort params is null', async () => {
+    const createdAt = new Date()
+    const items = [
+      new UserEntity(UserDataBuilder({ name: 'Test', createdAt })),
+      new UserEntity(
+        UserDataBuilder({
+          name: 'TEST',
+          createdAt: new Date(createdAt.getTime() + 1),
+        }),
+      ),
+      new UserEntity(
+        UserDataBuilder({
+          name: 'test',
+          createdAt: new Date(createdAt.getTime() + 2),
+        }),
+      ),
+      new UserEntity(
+        UserDataBuilder({
+          name: 'fake',
+          createdAt: new Date(createdAt.getTime() + 3),
+        }),
+      ),
+    ]
+    const itemsSorted = await sut['applySort'](items, null, null)
+    expect(itemsSorted).toStrictEqual([items[3], items[2], items[1], items[0]])
+  })
+
+  it('Should sort by name field', async () => {
+    const items = [
+      new UserEntity(UserDataBuilder({ name: 'c' })),
+      new UserEntity(UserDataBuilder({ name: 'b' })),
+      new UserEntity(UserDataBuilder({ name: 'd' })),
+      new UserEntity(UserDataBuilder({ name: 'a' })),
+    ]
+    let itemsSorted = await sut['applySort'](items, 'name', 'asc')
+    expect(itemsSorted).toStrictEqual([items[3], items[1], items[0], items[2]])
+
+    itemsSorted = await sut['applySort'](items, 'name', null)
+    expect(itemsSorted).toStrictEqual([items[2], items[0], items[1], items[3]])
   })
 })
