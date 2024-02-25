@@ -15,7 +15,7 @@ export namespace SignupUseCase {
     name: string
     email: string
     password: string
-    CreatedAt?: Date
+    createdAt: Date
   }
 
   export class UseCase {
