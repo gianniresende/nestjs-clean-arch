@@ -1,6 +1,5 @@
-import { SearchResult } from "@/shared/domain/repositories/searchable-repository-contracts"
-import { PaginationOutputMapper } from "../../pagination-output"
-
+import { SearchResult } from '@/shared/domain/repositories/searchable-repository-contracts'
+import { PaginationOutputMapper } from '../../pagination-output'
 
 describe('PaginationOutputMapper unit tests', () => {
   it('Should convert a searchResult in output', () => {
