@@ -21,7 +21,7 @@ export namespace UpdatePasswordUseCase {
 
     async execute(_Input: Input): Promise<Output> {
       const entity = await this.userRepository.findById(_Input.id)
-      if (!_Input.password || _Input.old_password) {
+      if (!_Input.password || !_Input.old_password) {
         throw new InvalidPasswordError(
           'Old password and new password is required',
         )
