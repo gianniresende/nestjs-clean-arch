@@ -9,6 +9,7 @@ import { UpdateUserDto } from '../../dtos/update-user.dto'
 import { UpdatePasswordUseCase } from '@/users/application/usecases/Update-password.usecase'
 import { UpdatePasswordDto } from '../../dtos/update-password.dto'
 import { GetUserUseCase } from '@/users/application/usecases/get-user.usecase'
+import { ListUsersUseCase } from '@/users/application/usecases/list-users.usecase'
 
 describe('UsersController unit tests', () => {
   let sut: UsersController
@@ -130,5 +131,29 @@ describe('UsersController unit tests', () => {
 
     expect(output).toStrictEqual(result)
     expect(mockGetUserUseCase.execute).toHaveBeenCalledWith({ id })
+  })
+
+  it('should list users', async () => {
+    const output: ListUsersUseCase.Output = {
+      items: [props],
+      currentPage: 1,
+      lastPage: 1,
+      perPage: 15,
+      total: 1,
+    }
+    const mockListUsersUseCase = {
+      execute: jest.fn().mockReturnValue(Promise.resolve(output)),
+    }
+    sut['listUsersUseCase'] = mockListUsersUseCase as any
+
+    const searchParams = {
+      page: 1,
+      perPage: 1,
+    }
+
+    const result = await sut.search(searchParams)
+
+    expect(output).toStrictEqual(result)
+    expect(mockListUsersUseCase.execute).toHaveBeenCalledWith(searchParams)
   })
 })
