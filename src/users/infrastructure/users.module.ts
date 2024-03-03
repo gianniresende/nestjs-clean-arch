@@ -10,14 +10,22 @@ import { GetUserUseCase } from '../application/usecases/get-user.usecase'
 import { SigninUseCase } from '../application/usecases/signin.usecase'
 import { SignupUseCase } from '../application/usecases/signup.usecase'
 import { BcryptjsHashProvider } from './providers/hash-provider/bcryptjs-hash.provider'
-import { UserInMemoryRepository } from './database/in-memory/repositories/user-in-memory.repository'
+import { PrismaService } from '@/shared/infrastructure/database/prisma/prisma.service'
+import { UserPrismaRepository } from './database/prisma/repositories/user-prisma,repository'
 
 @Module({
   controllers: [UsersController],
   providers: [
     {
+      provide: 'PrismaService',
+      useClass: PrismaService,
+    },
+    {
       provide: 'UserRepository',
-      useClass: UserInMemoryRepository,
+      useFactory: (prismaService: PrismaService) => {
+        return new UserPrismaRepository(prismaService)
+      },
+      inject: ['PrismaSErvice'],
     },
     {
       provide: 'HashProvider',
