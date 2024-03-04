@@ -72,7 +72,6 @@ describe('UserModelMapper integration tests', () => {
         entities.push(
           new UserEntity({
             ...element,
-            name: `User${index}`,
             email: `test${index}@email.com`,
             createdAt: new Date(createdAt.getTime() + index)
           })
@@ -86,6 +85,7 @@ describe('UserModelMapper integration tests', () => {
       const searchOutput = await sut.search(new UserRepository.SearchParams())
       expect(searchOutput).toBeInstanceOf(UserRepository.SearchResult)
       expect(searchOutput.total).toBe(16)
+      expect(searchOutput.items.length).toBe(15)
       searchOutput.items.forEach(item => {
         expect(item).toBeInstanceOf(UserEntity)
       })
