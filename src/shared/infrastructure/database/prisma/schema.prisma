@@ -19,7 +19,7 @@ model User {
   name      String      @db.VarChar(255)
   email     String      @unique @db.VarChar(255)
   password  String      @db.VarChar(100)
-  createdAT DateTime    @default(now())
+  createdAt DateTime    @default(now())
 
   @@map("users")
 }

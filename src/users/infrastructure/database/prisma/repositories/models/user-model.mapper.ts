@@ -8,7 +8,7 @@ export class UserModelMapper {
       name: model.name,
       email: model.email,
       password: model.password,
-      createdAt: model.createdAT,
+      createdAt: model.createdAt,
     }
 
     try {
