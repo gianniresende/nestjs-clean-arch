@@ -1,8 +1,6 @@
 import { setupPrismaTests } from '@/shared/infrastructure/database/prisma/testing/setup-prisma-tests'
 import { UserEntity } from '@/users/domain/entities/user.entity'
-import { PrismaClient, User } from '@prisma/client'
-import { ValidationError } from 'class-validator'
-import { UserModelMapper } from '../../../models/user-model.mapper'
+import { PrismaClient } from '@prisma/client'
 import { UserPrismaRepository } from '../../user-prisma.repository'
 import { Test, TestingModule } from '@nestjs/testing'
 import { DatabaseModule } from '@/shared/infrastructure/database/database.module'
@@ -51,5 +49,16 @@ describe('UserModelMapper integration tests', () => {
     })
 
     expect(result).toStrictEqual(entity.toJSON())
+  })
+
+  it('Should return all users', async () => {
+    const entity = new UserEntity(UserDataBuilder({}))
+    const newUser = await prismaService.user.create({
+      data: entity.toJSON(),
+    })
+    const entities = await sut.findAll()
+    expect(entities).toHaveLength(1)
+    expect(JSON.stringify(entities)).toBe(JSON.stringify([entity]))
+    entities.map(item => expect(item.toJSON()).toStrictEqual(entity.toJSON()))
   })
 })
