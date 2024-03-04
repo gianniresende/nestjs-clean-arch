@@ -2,7 +2,7 @@ import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { PrismaService } from '@/shared/infrastructure/database/prisma/prisma.service'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserRepository } from '@/users/domain/repositories/user.repository'
-import { UserModelMapper } from './models/user-model.mapper'
+import { UserModelMapper } from '../models/user-model.mapper'
 
 export class UserPrismaRepository implements UserRepository.Repository {
   constructor(private prismaService: PrismaService) {}

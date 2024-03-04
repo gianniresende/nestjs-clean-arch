@@ -11,7 +11,7 @@ import { SigninUseCase } from '../application/usecases/signin.usecase'
 import { SignupUseCase } from '../application/usecases/signup.usecase'
 import { BcryptjsHashProvider } from './providers/hash-provider/bcryptjs-hash.provider'
 import { PrismaService } from '@/shared/infrastructure/database/prisma/prisma.service'
-import { UserPrismaRepository } from './database/prisma/repositories/user-prisma,repository'
+import { UserPrismaRepository } from './database/prisma/repositories/user-prisma.repository'
 
 @Module({
   controllers: [UsersController],
