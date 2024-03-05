@@ -52,14 +52,12 @@ export class UserPrismaRepository implements UserRepository.Repository {
           },
         },
       }),
-        orderBy: {
-          [orderByField]: orderByDir,
-        },
-        skip:
-          props.page && props.page > 0 ? (props.page - 1) * props.perPage : 1,
-        take: props.perPage && props.perPage > 0 ? props.perPage : 15,
+      orderBy: {
+        [orderByField]: orderByDir,
       },
-    )
+      skip: props.page && props.page > 0 ? (props.page - 1) * props.perPage : 1,
+      take: props.perPage && props.perPage > 0 ? props.perPage : 15,
+    })
 
     return new UserRepository.SearchResult({
       items: models.map(model => UserModelMapper.toEntity(model)),
@@ -75,8 +73,14 @@ export class UserPrismaRepository implements UserRepository.Repository {
     await this.prismaService.user.create({ data: entity.toJSON() })
   }
 
-  update(entity: UserEntity): Promise<void> {
-    throw new Error('Method not implemented.')
+  async update(entity: UserEntity): Promise<void> {
+    await this._get(entity._id)
+    await this.prismaService.user.update({
+      data: entity.toJSON(),
+      where: {
+        id: entity._id,
+      },
+    })
   }
   delete(id: string): Promise<void> {
     throw new Error('Method not implemented.')

@@ -63,6 +63,28 @@ describe('UserModelMapper integration tests', () => {
     entities.map(item => expect(item.toJSON()).toStrictEqual(entity.toJSON()))
   })
 
+  it('Should throws error on update when entity not found', async () => {
+    const entity = new UserEntity(UserDataBuilder({}))
+    expect(sut.update(entity)).rejects.toThrow(
+      new NotFoundError(`UserModel not found using ID ${entity._id}`),
+    )
+  })
+
+  it('Should update a entity', async () => {
+    const entity = new UserEntity(UserDataBuilder({}))
+    const newUser = await prismaService.user.create({
+      data: entity.toJSON(),
+    })
+    entity.update('new name')
+    await sut.update(entity)
+    const output = await prismaService.user.findUnique({
+      where: {
+        id: entity._id,
+      },
+    })
+    expect(output.name).toBe('new name')
+  })
+
   describe('Search method tests', () => {
     it('Should apply only pagination when the other params are null', async () => {
       const createdAt = new Date()
@@ -73,8 +95,8 @@ describe('UserModelMapper integration tests', () => {
           new UserEntity({
             ...element,
             email: `test${index}@email.com`,
-            createdAt: new Date(createdAt.getTime() + index)
-          })
+            createdAt: new Date(createdAt.getTime() + index),
+          }),
         )
       })
 
@@ -103,8 +125,8 @@ describe('UserModelMapper integration tests', () => {
         entities.push(
           new UserEntity({
             ...UserDataBuilder({ name: element }),
-            createdAt: new Date(createdAt.getTime() + index)
-          })
+            createdAt: new Date(createdAt.getTime() + index),
+          }),
         )
       })
 
@@ -112,26 +134,36 @@ describe('UserModelMapper integration tests', () => {
         data: entities.map(item => item.toJSON()),
       })
 
-      const searchOutputPage1 = await sut.search(new UserRepository.SearchParams({
-        page: 1,
-        perPage: 2,
-        sort: 'name',
-        sortDir: 'asc',
-        filter: 'TEST',
-      }))
+      const searchOutputPage1 = await sut.search(
+        new UserRepository.SearchParams({
+          page: 1,
+          perPage: 2,
+          sort: 'name',
+          sortDir: 'asc',
+          filter: 'TEST',
+        }),
+      )
 
-      expect(searchOutputPage1.items[0].toJSON()).toMatchObject(entities[0].toJSON())
-      expect(searchOutputPage1.items[1].toJSON()).toMatchObject(entities[4].toJSON())
+      expect(searchOutputPage1.items[0].toJSON()).toMatchObject(
+        entities[0].toJSON(),
+      )
+      expect(searchOutputPage1.items[1].toJSON()).toMatchObject(
+        entities[4].toJSON(),
+      )
 
-      const searchOutputPage2 = await sut.search(new UserRepository.SearchParams({
-        page: 2,
-        perPage: 2,
-        sort: 'name',
-        sortDir: 'asc',
-        filter: 'TEST',
-      }))
+      const searchOutputPage2 = await sut.search(
+        new UserRepository.SearchParams({
+          page: 2,
+          perPage: 2,
+          sort: 'name',
+          sortDir: 'asc',
+          filter: 'TEST',
+        }),
+      )
 
-      expect(searchOutputPage2.items[0].toJSON()).toMatchObject(entities[2].toJSON())
+      expect(searchOutputPage2.items[0].toJSON()).toMatchObject(
+        entities[2].toJSON(),
+      )
     })
   })
 })
