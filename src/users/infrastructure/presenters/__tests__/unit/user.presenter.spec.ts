@@ -1,4 +1,4 @@
-import { UserPresenter } from "../../user.presenter"
+import { UserPresenter } from '../../user.presenter'
 
 describe('UsersPresenter unit tests', () => {
   const createdAt = new Date()
