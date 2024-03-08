@@ -22,9 +22,8 @@ import { GetUserUseCase } from '../application/usecases/get-user.usecase'
 import { ListUsersUseCase } from '../application/usecases/list-users.usecase'
 import { SigninDto } from './dtos/signin.dto'
 import { ListUsersDto } from './dtos/list-users.dto'
-import { UpdatePasswordDto } from './dtos/update-password.dto'
-import { UsersService } from './users.service'
-import { CreateUserDto } from './dto/create-user.dto'
+import { UserOutput } from '../application/dtos/user-output'
+import { UserPresenter } from './presenters/user.presenter'
 
 @Controller('users')
 export class UsersController {
@@ -48,17 +47,21 @@ export class UsersController {
 
   @Inject(ListUsersUseCase.UseCase)
   private listUsersUseCase: ListUsersUseCase.UseCase
-  constructor(private readonly usersService: UsersService) {}
+  static userToResponse(output: UserOutput) {
+    return new UserPresenter(output)
+  }
 
   @Post()
   async create(@Body() signupDto: SignupDto) {
-    return this.signupUseCase.execute(signupDto)
+    const output = await this.signupUseCase.execute(signupDto)
+    return UsersController.userToResponse(output)
   }
 
   @HttpCode(200)
   @Post('login')
   async login(@Body() signinDto: SigninDto) {
-    return this.signinUseCase.execute(signinDto)
+    const output = await this.signinUseCase.execute(signinDto)
+    return UsersController.userToResponse(output)
   }
 
   @Get()
@@ -68,7 +71,8 @@ export class UsersController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.getUserUseCase.execute({ id })
+    const output = await this.getUserUseCase.execute({ id })
+    return UsersController.userToResponse(output)
   }
 
   @Put(':id')

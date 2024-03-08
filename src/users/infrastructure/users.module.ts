@@ -25,7 +25,7 @@ import { DeleteUserUseCase } from '../application/usecases/delete-user.usecase'
       useFactory: (prismaService: PrismaService) => {
         return new UserPrismaRepository(prismaService)
       },
-      inject: ['PrismaSErvice'],
+      inject: ['PrismaService'],
     },
     {
       provide: 'HashProvider',
