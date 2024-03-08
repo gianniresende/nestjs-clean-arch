@@ -32,11 +32,6 @@ describe('DeleteUseCase integration tests', () => {
   })
 
   it('Should throw error when entity not found', async () => {
-    const props = {
-      name: 'test name',
-      email: 'a@a.com',
-      password: '123456',
-    }
     await expect(sut.execute({ id: 'fakeId' })).rejects.toThrow(
       new NotFoundError('UserModel not found using ID fakeId'),
     )
