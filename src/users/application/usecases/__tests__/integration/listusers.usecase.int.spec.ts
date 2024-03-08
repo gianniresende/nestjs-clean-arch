@@ -6,7 +6,6 @@ import { DatabaseModule } from '@/shared/infrastructure/database/database.module
 import { UserDataBuilder } from '@/users/domain/testing/helpers/user-data-builder'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { ListUsersUseCase } from '../../list-users.usecase'
-import { UserRepository } from '@/users/domain/repositories/user.repository'
 
 describe('ListUserUseCase integration tests', () => {
   const prismaService = new PrismaClient()
